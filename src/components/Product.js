@@ -1,15 +1,37 @@
 import React from 'react'
 import styled from 'styled-components'
+import {db} from '../Firebase'
 
 function Product(props) {
   const { name, price, rating, image } = props.product;
+  const { id } = props;
+  console.log(id);
+  const addToCart = () => {
+    const cartItem = db.collection('cartItems').doc(id);
+    cartItem.get()
+    .then((doc) => {
+      if (doc.exists) {
+        cartItem.update({
+          quantity: doc.data().quantity + 1
+        })
+      } else {
+        db.collection('cartItems').doc(id).set({
+          name,
+          price,
+          quantity: 1,
+          image,
+        })
+      }
+    })
+  }
+
   return (
     <Container>
       <Title>{name}</Title>
       <Price>${price}</Price>
       <Rating>{'★'.repeat(rating)}</Rating>
       <Image src={image}/>
-      <AddToCartButton>
+      <AddToCartButton onClick={addToCart}>
         Add to Cart
       </AddToCartButton>
     </Container>

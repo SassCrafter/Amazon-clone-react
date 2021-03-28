@@ -28,7 +28,7 @@ function HomeContent() {
     <Container>
       {
         products.map((productData) => {
-          return <Product key={productData.id} product={productData.product} />
+          return <Product key={productData.id} id={productData.id} product={productData.product} />
         })
       }
     </Container>
